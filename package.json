@@ -1,0 +1,27 @@
+{
+  "name": "baasic-javascript-docgen",
+  "version": "1.0.0",
+  "description": "Baasic Javascript Document generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mzilic/baasic-javascript-docgen"
+  },
+  "keywords": [
+    "baasic",
+    "document",
+    "generator"
+  ],
+  "author": "Mario Zilic <mzilic@mono-software.com> (http://mono.software/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mzilic/baasic-javascript-docgen/issues"
+  },
+  "homepage": "https://github.com/mzilic/baasic-javascript-docgen",
+  "dependencies": {
+    "jsdox": "^0.4.8"
+  }
+}
