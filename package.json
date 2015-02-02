@@ -1,7 +1,7 @@
 {
   "name": "baasic-javascript-docgen",
   "version": "1.0.0",
-  "description": "Baasic Javascript Document generator",
+  "description": "Baasic Javascript Document Generator",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
