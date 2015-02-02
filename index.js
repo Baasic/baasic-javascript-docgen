@@ -1,8 +1,6 @@
 'use strict';
 var jsdox = require("jsdox"),
-pluginName = "baasic-javascript-docgen",
 fileSystem = require('fs'),
-path = require("path"),
 nodePath = require('path'),
 SIDEBAR_FILENAME = "_Sidebar",
 index = 0,
@@ -148,6 +146,6 @@ module.exports.generateBaasicDocs = function (inputLocation, outputLocation, tit
   outputFolder = outputLocation;
   sidebarTitle = title;
   filePaths = getFiles(inputFolder);
-  templateDir = path.resolve(__dirname, 'templates');
+  templateDir = nodePath.resolve(__dirname, 'templates');
   parseDox();
 };
