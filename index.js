@@ -9,7 +9,8 @@ inputFolder = "",
 outputFolder = "",
 sidebarTitle = "",
 filePaths,
-templateDir = "";
+templateDir = "",
+ignoreFiles;
 
 function getFiles(dir, files_) {
   files_ = files_ || [];
@@ -61,6 +62,11 @@ function parseDox() {
   }
 
   var filePath = filePaths[index];
+  if (ignoreFiles && ignoreFiles.indexOf(filePath) > -1) {
+    index++;
+    parseDox();
+    return;
+  }
   var outputPath = getOutputPath(filePath);
   ensureFolderExists(outputPath);
 
@@ -141,11 +147,18 @@ function saveSidebar(sidebar) {
   fileSystem.writeFile(sidebarPath, sidebar, function (error) {});
 }
 
-module.exports.generateBaasicDocs = function (inputLocation, outputLocation, title) {
+module.exports.generateBaasicDocs = function (inputLocation, outputLocation, title, filesToIgnore) {
   inputFolder = inputLocation;
   outputFolder = outputLocation;
   sidebarTitle = title;
   filePaths = getFiles(inputFolder);
   templateDir = nodePath.resolve(__dirname, 'templates');
+  if (filesToIgnore && filesToIgnore.length > 0) {
+    var files = [];
+    for (var i = 0; i < filesToIgnore.length; i++) {
+      files.push(inputLocation + "\\" + filesToIgnore[i]);
+    };
+    ignoreFiles = files;
+  }
   parseDox();
 };
