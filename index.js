@@ -1,5 +1,5 @@
 'use strict';
-var jsdox = require("jsdox"),
+var jsdox = require("jsdox-baasic"),
 fileSystem = require('fs'),
 nodePath = require('path'),
 SIDEBAR_FILENAME = "_Sidebar",

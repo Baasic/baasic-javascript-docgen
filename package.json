@@ -1,6 +1,6 @@
 {
   "name": "baasic-javascript-docgen",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Baasic Javascript Document Generator",
   "main": "index.js",
   "scripts": {
@@ -23,5 +23,8 @@
   "homepage": "https://github.com/mzilic/baasic-javascript-docgen",
   "dependencies": {
     "jsdox": "^0.4.8"
+  },
+  "devDependencies": {
+    "jsdox-baasic": "git://github.com/mzilic/jsdox"
   }
 }
