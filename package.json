@@ -22,9 +22,6 @@
   },
   "homepage": "https://github.com/mzilic/baasic-javascript-docgen",
   "dependencies": {
-    "jsdox": "^0.4.8"
-  },
-  "devDependencies": {
-    "jsdox-baasic": "git://github.com/mzilic/jsdox"
-  }
+    "jsdox": "git://github.com/mzilic/jsdox"
+  }  
 }
