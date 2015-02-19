@@ -5,6 +5,7 @@ nodePath = require('path'),
 SIDEBAR_FILENAME = "_Sidebar",
 index = 0,
 convertedFiles = [],
+addedFiles = [],
 inputFolder = "",
 outputFolder = "",
 sidebarTitle = "",
@@ -110,9 +111,15 @@ function generateSidebar() {
             fileSystem.unlinkSync(path)
           }
           fileSystem.renameSync(paths[i], path);
-          sidebar += " * [" + name + "](" + newFileName + ")\n";
+          if (addedFiles.indexOf(newFileName) === -1) {
+            sidebar += " * [" + name + "](" + newFileName + ")\n";
+            addedFiles.push(newFileName);
+          }
         } else {
-          sidebar += " * [" + name + "](" + fileName + ")\n";
+          if (addedFiles.indexOf(fileName) === -1) {
+            sidebar += " * [" + name + "](" + fileName + ")\n";
+            addedFiles.push(fileName);
+          }
         }
       }
     }
