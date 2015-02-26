@@ -6,7 +6,7 @@ Baasic javascript document generator. Relies on gulp and jsdox to generate docum
 
 ## Install
 ```
-npm install mzilic/baasic-javascript-docgen --save-dev
+npm install Baasic/baasic-javascript-docgen --save-dev
 ```
 ## Usage
 ```
