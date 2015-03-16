@@ -34,13 +34,14 @@
 {{> function}}
 
 {{/functions}}
+
 {{#classes}}
 {{> class}}
 
 {{/classes}}
-
-{{/modules}}
+{{#hasFunctions}}
 * * *
+{{/hasFunctions}}
 
 {{#copyright}}*{{copyright}}*{{/copyright}}
 
@@ -48,6 +49,4 @@
 
 {{#license}}**License:** {{license}} {{/license}}
 
-{{#overview}}**Overview:** {{{overview}}}{{/overview}}
-
-{{#version}}**Version:** {{version}}{{/version}}
+{{/modules}}
