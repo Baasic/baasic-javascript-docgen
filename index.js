@@ -11,7 +11,8 @@ outputFolder = "",
 sidebarTitle = "",
 filePaths,
 templateDir = "",
-ignoreFiles;
+ignoreFiles,
+topNavItems = [];
 
 function getFiles(dir, files_) {
   files_ = files_ || [];
@@ -85,17 +86,23 @@ function generateSidebar() {
   var sidebar = "**" + sidebarTitle + "**\n\n";
   var sidebarPaths = getSidebarPaths(paths);
 
+  var sidebarLines = [];
+  var insertIndex = 0;
+
   for (var i in sidebarPaths) {
     var sidebarPath = sidebarPaths[i];
     var sidebarHeader = convertPathToUri(sidebarPath).replace(outputFolder, '');
     if (sidebarHeader) {
-      sidebar += "* " + sidebarHeader + "\n\n";
+      sidebarLines.push("* " + sidebarHeader + "\n\n");
     }
 
     for (var i in paths) {
       var filePath = getOutputPath(paths[i]);
       if (filePath == sidebarPath) {
         var fileName = nodePath.basename(paths[i], '.md');
+        if (paths[i].indexOf(".markdown") >  - 1) {
+          fileName = nodePath.basename(paths[i], '.markdown');
+        }
         if (fileName == SIDEBAR_FILENAME || fileName == ".git")
           continue;
 
@@ -111,23 +118,39 @@ function generateSidebar() {
             fileSystem.unlinkSync(path)
           }
           fileSystem.renameSync(paths[i], path);
-          if (addedFiles.indexOf(newFileName) === -1) {
-            sidebar += " * [" + name + "](" + newFileName + ")\n";
+          if (topNavItems.indexOf(paths[i]) >  - 1) {
+            sidebarLines.splice(insertIndex, 0, " * [" + capitalizeFirstLetter(name) + "](" + newFileName + ")\n");
+            addedFiles.push(newFileName);
+            insertIndex++;
+          } else if (addedFiles.indexOf(newFileName) === -1) {
+            sidebarLines.push(" * [" + name + "](" + newFileName + ")\n");
             addedFiles.push(newFileName);
           }
         } else {
-          if (addedFiles.indexOf(fileName) === -1) {
-            sidebar += " * [" + name + "](" + fileName + ")\n";
+          if (topNavItems.indexOf(paths[i]) >  - 1) {
+            sidebarLines.splice(insertIndex, 0, " * [" + capitalizeFirstLetter(name) + "](" + fileName + ")\n");
+            addedFiles.push(newFileName);
+            insertIndex++;
+          } else if (addedFiles.indexOf(fileName) === -1) {
+            sidebarLines.push(" * [" + name + "](" + fileName + ")\n");
             addedFiles.push(fileName);
           }
         }
       }
     }
 
-    sidebar += "\n";
+    sidebarLines.push("\n");
+  }
+
+  for (var i in sidebarLines) {
+    sidebar += sidebarLines[i];
   }
 
   saveSidebar(sidebar);
+}
+
+function capitalizeFirstLetter(input) {
+  return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
 function getSidebarPaths(paths) {
@@ -154,11 +177,18 @@ function saveSidebar(sidebar) {
   fileSystem.writeFile(sidebarPath, sidebar, function (error) {});
 }
 
-module.exports.generateBaasicDocs = function (inputLocation, outputLocation, title, filesToIgnore) {
+module.exports.generateBaasicDocs = function (inputLocation, outputLocation, title, filesToIgnore, navItems) {
   inputFolder = inputLocation;
   outputFolder = outputLocation;
   sidebarTitle = title;
   filePaths = getFiles(inputFolder);
+  if (navItems && navItems.length > 0) {
+    var files = [];
+    for (var i = 0; i < navItems.length; i++) {
+      files.push(outputLocation + "\\" + navItems[i]);
+    };
+    topNavItems = files;
+  }
   templateDir = nodePath.resolve(__dirname, 'templates');
   if (filesToIgnore && filesToIgnore.length > 0) {
     var files = [];
