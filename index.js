@@ -77,7 +77,9 @@ function parseDox() {
   convertedFiles.push(outputPath + "\\" + mdFile);
   jsdox.generateForDir(filePath, outputPath, templateDir, function () {
     index++;
-    parseDox();
+    setTimeout(function () {
+      parseDox();
+    }, 250);    
   });
 }
 function generateSidebar() {

@@ -1,6 +1,6 @@
 {
   "name": "baasic-javascript-docgen",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Baasic Javascript Document Generator",
   "main": "index.js",
   "scripts": {
