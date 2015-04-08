@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/Baasic/baasic-javascript-docgen",
   "dependencies": {
-    "jsdox": "git://github.com/Baasic/jsdox"
+    "jsdox": "https://github.com/Baasic/jsdox"
   }  
 }
