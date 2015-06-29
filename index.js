@@ -3,6 +3,7 @@ var jsdox = require("jsdox-baasic"),
 fileSystem = require('fs'),
 nodePath = require('path'),
 SIDEBAR_FILENAME = "_Sidebar",
+EXCLUDE_FILENAMES = ["_Sidebar", "_Footer"],
 index = 0,
 convertedFiles = [],
 addedFiles = [],
@@ -105,7 +106,7 @@ function generateSidebar() {
         if (paths[i].indexOf(".markdown") >  - 1) {
           fileName = nodePath.basename(paths[i], '.markdown');
         }
-        if (fileName == SIDEBAR_FILENAME || fileName == ".git")
+        if (EXCLUDE_FILENAMES.indexOf(fileName) > -1 || fileName == ".git")
           continue;
 
         var name = fileName;
