@@ -1,19 +1,21 @@
 'use strict';
-var jsdox = require("jsdox-baasic"),
+var jsdox = require('jsdox-baasic'),
 fileSystem = require('fs'),
 nodePath = require('path'),
-SIDEBAR_FILENAME = "_Sidebar",
-EXCLUDE_FILENAMES = ["_Sidebar", "_Footer"],
+SIDEBAR_FILENAME = '_Sidebar',
+FOOTER_FILENAME = '_Footer',
+EXCLUDE_FILENAMES = [SIDEBAR_FILENAME, FOOTER_FILENAME],
 index = 0,
 convertedFiles = [],
 addedFiles = [],
-inputFolder = "",
-outputFolder = "",
-sidebarTitle = "",
+inputFolder = '',
+outputFolder = '',
+sidebarTitle = '',
 filePaths,
-templateDir = "",
+templateDir = '',
 ignoreFiles,
-topNavItems = [];
+topNavItems = [],
+footerData = '';
 
 function getFiles(dir, files_) {
   files_ = files_ || [];
@@ -39,7 +41,7 @@ function getFiles(dir, files_) {
 }
 
 function getOutputPath(filePath) {
-  return filePath.substring(0, filePath.lastIndexOf("\\")).replace(inputFolder, outputFolder);
+  return filePath.substring(0, filePath.lastIndexOf('\\')).replace(inputFolder, outputFolder);
 }
 
 function ensureFolderExists(path) {
@@ -73,20 +75,20 @@ function parseDox() {
   var outputPath = getOutputPath(filePath);
   ensureFolderExists(outputPath);
 
-  var mdFile = filePath.replace(/.js/g, ".md");
-  mdFile = mdFile.substring(mdFile.lastIndexOf("\\") + 1);
-  convertedFiles.push(outputPath + "\\" + mdFile);
+  var mdFile = filePath.replace(/.js/g, '.md');
+  mdFile = mdFile.substring(mdFile.lastIndexOf('\\') + 1);
+  convertedFiles.push(outputPath + '\\' + mdFile);
   jsdox.generateForDir(filePath, outputPath, templateDir, function () {
     index++;
     setTimeout(function () {
       parseDox();
-    }, 250);    
+    }, 250);
   });
 }
 function generateSidebar() {
   var outputPath = outputFolder;
   var paths = getFiles(outputPath).sort();
-  var sidebar = "**" + sidebarTitle + "**\n\n";
+  var sidebar = '**' + sidebarTitle + '**\n\n';
   var sidebarPaths = getSidebarPaths(paths);
 
   var sidebarLines = [];
@@ -96,53 +98,53 @@ function generateSidebar() {
     var sidebarPath = sidebarPaths[i];
     var sidebarHeader = convertPathToUri(sidebarPath).replace(outputFolder, '');
     if (sidebarHeader) {
-      sidebarLines.push("* " + sidebarHeader + "\n\n");
+      sidebarLines.push('* ' + sidebarHeader + '\n\n');
     }
 
     for (var i in paths) {
       var filePath = getOutputPath(paths[i]);
       if (filePath == sidebarPath) {
         var fileName = nodePath.basename(paths[i], '.md');
-        if (paths[i].indexOf(".markdown") >  - 1) {
+        if (paths[i].indexOf('.markdown') >  - 1) {
           fileName = nodePath.basename(paths[i], '.markdown');
         }
-        if (EXCLUDE_FILENAMES.indexOf(fileName) > -1 || fileName == ".git")
+        if (EXCLUDE_FILENAMES.indexOf(fileName) > -1 || fileName == '.git')
           continue;
 
         var name = fileName;
-        if (fileName.lastIndexOf("-") > -1) {
-          name = fileName.substring(fileName.lastIndexOf("-") + 1);
+        if (fileName.lastIndexOf('-') > -1) {
+          name = fileName.substring(fileName.lastIndexOf('-') + 1);
         }
 
         if (filePath !== outputFolder && convertedFiles.indexOf(paths[i]) > -1) {
-          var newFileName = filePath.replace(/\\/g, "-").replace(outputFolder + "-", "") + "-" + fileName;
-          var path = filePath + "\\" + newFileName + ".md";
+          var newFileName = filePath.replace(/\\/g, '-').replace(outputFolder + '-', '') + '-' + fileName;
+          var path = filePath + '\\' + newFileName + '.md';
           if (fileSystem.existsSync(path)) {
             fileSystem.unlinkSync(path)
           }
           fileSystem.renameSync(paths[i], path);
           if (topNavItems.indexOf(paths[i]) >  - 1) {
-            sidebarLines.splice(insertIndex, 0, " * [" + capitalizeFirstLetter(name) + "](" + newFileName + ")\n");
+            sidebarLines.splice(insertIndex, 0, ' * [' + capitalizeFirstLetter(name) + '](' + newFileName + ')\n');
             addedFiles.push(newFileName);
             insertIndex++;
           } else if (addedFiles.indexOf(newFileName) === -1) {
-            sidebarLines.push(" * [" + name + "](" + newFileName + ")\n");
+            sidebarLines.push(' * [' + name + '](' + newFileName + ')\n');
             addedFiles.push(newFileName);
           }
         } else {
           if (topNavItems.indexOf(paths[i]) >  - 1) {
-            sidebarLines.splice(insertIndex, 0, " * [" + capitalizeFirstLetter(name) + "](" + fileName + ")\n");
+            sidebarLines.splice(insertIndex, 0, ' * [' + capitalizeFirstLetter(name) + '](' + fileName + ')\n');
             addedFiles.push(newFileName);
             insertIndex++;
           } else if (addedFiles.indexOf(fileName) === -1) {
-            sidebarLines.push(" * [" + name + "](" + fileName + ")\n");
+            sidebarLines.push(' * [' + name + '](' + fileName + ')\n');
             addedFiles.push(fileName);
           }
         }
       }
     }
 
-    sidebarLines.push("\n");
+    sidebarLines.push('\n');
   }
 
   for (var i in sidebarLines) {
@@ -150,6 +152,7 @@ function generateSidebar() {
   }
 
   saveSidebar(sidebar);
+  saveFooter();
 }
 
 function capitalizeFirstLetter(input) {
@@ -171,13 +174,30 @@ function getSidebarPaths(paths) {
 }
 
 function convertPathToUri(path) {
-  var projPath = "\\";
+  var projPath = '\\';
   return path.replace(projPath, '').split('\\').join('/');
 }
 
 function saveSidebar(sidebar) {
-  var sidebarPath = outputFolder + "\\" + SIDEBAR_FILENAME + ".md";
+  var sidebarPath = outputFolder + '\\' + SIDEBAR_FILENAME + '.md';
   fileSystem.writeFile(sidebarPath, sidebar, function (error) {});
+}
+
+function saveFooter() {
+  var path = outputFolder + '\\' + FOOTER_FILENAME + '.md';
+  fileSystem.writeFile(path, footerData, function (error) {});
+}
+
+function setupFooter() {
+  var footerPath = nodePath.resolve(__dirname, 'template-footer') + '/_Footer.md';
+  footerData = fileSystem.readFileSync(footerPath, {
+      encoding : 'utf8'
+    });
+  var bowerData = fileSystem.readFileSync('bower.json', {
+      encoding : 'utf8'
+    });
+  var bowserJson = JSON.parse(bowerData);
+  footerData = footerData.replace('<version>', bowserJson.version);
 }
 
 module.exports.generateBaasicDocs = function (inputLocation, outputLocation, title, filesToIgnore, navItems) {
@@ -188,7 +208,7 @@ module.exports.generateBaasicDocs = function (inputLocation, outputLocation, tit
   if (navItems && navItems.length > 0) {
     var files = [];
     for (var i = 0; i < navItems.length; i++) {
-      files.push(outputLocation + "\\" + navItems[i]);
+      files.push(outputLocation + '\\' + navItems[i]);
     };
     topNavItems = files;
   }
@@ -196,9 +216,10 @@ module.exports.generateBaasicDocs = function (inputLocation, outputLocation, tit
   if (filesToIgnore && filesToIgnore.length > 0) {
     var files = [];
     for (var i = 0; i < filesToIgnore.length; i++) {
-      files.push(inputLocation + "\\" + filesToIgnore[i]);
+      files.push(inputLocation + '\\' + filesToIgnore[i]);
     };
     ignoreFiles = files;
   }
+  setupFooter();
   parseDox();
 };
