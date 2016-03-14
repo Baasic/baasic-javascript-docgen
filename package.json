@@ -1,6 +1,6 @@
 {
   "name": "baasic-javascript-docgen",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Baasic Javascript Document Generator",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/Baasic/baasic-javascript-docgen",
   "dependencies": {
-    "jsdox": "git+https://github.com/Baasic/jsdox.git"
+    "jsdox-baasic": "git+https://github.com/Baasic/jsdox.git"
   }  
 }
