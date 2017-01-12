@@ -1,4 +1,4 @@
-*(c) 2015 Mono*
+*(c) <year> Mono Software*
 
 **Version:** <version>
 
