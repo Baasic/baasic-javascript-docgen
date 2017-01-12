@@ -1,7 +1,7 @@
-*(c) <year> Mono Software*
+*(c) <year> Mono Ltd.*
 
 **Version:** <version>
 
-**Author:** Mono
+**Author:** Mono Ltd.
 
 **License:** MIT
