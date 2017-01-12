@@ -198,7 +198,7 @@ function setupFooter() {
     });
   var bowserJson = JSON.parse(bowerData);
   footerData = footerData.replace('<version>', bowserJson.version);
-  footerData = footerData.replace('<year>', new Date.getYear());
+  footerData = footerData.replace('<year>', new Date().getFullYear());
 }
 
 module.exports.generateBaasicDocs = function (inputLocation, outputLocation, title, filesToIgnore, navItems) {
